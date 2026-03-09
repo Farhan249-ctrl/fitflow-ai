@@ -56,7 +56,7 @@ export default function NutritionResultCard({ analysis }) {
           </p>
         </div>
       ) : (
-        <div className="flex flex-1 flex-col justify-between gap-6">
+        <div className="flex flex-1 flex-col justify-between gap-6 animate-fade-in">
           {/* Top: Calories + Food name */}
           <div className="rounded-xl bg-slate-900 text-slate-50 px-4 py-4 shadow-sm">
             <p className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">

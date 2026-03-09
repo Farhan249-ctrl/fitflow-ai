@@ -2,7 +2,13 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthProvider, useAuth } from "./AuthContext";
 import Login from "./Login";
 import Signup from "./Signup";
-import Dashboard from "./Dashboard";
+import DashboardLayout from "./components/DashboardLayout";
+import DashboardPage from "./pages/Dashboard";
+import FoodScannerPage from "./pages/FoodScanner";
+import NutritionPage from "./pages/Nutrition";
+import WorkoutsPage from "./pages/Workouts";
+import ProfilePage from "./pages/Profile";
+import SettingsPage from "./pages/Settings";
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated, initializing } = useAuth();
@@ -29,14 +35,22 @@ export default function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+
           <Route
-            path="/dashboard"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <DashboardLayout />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/food-scanner" element={<FoodScannerPage />} />
+            <Route path="/nutrition" element={<NutritionPage />} />
+            <Route path="/workouts" element={<WorkoutsPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+          </Route>
+
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </BrowserRouter>
