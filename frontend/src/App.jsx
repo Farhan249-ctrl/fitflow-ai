@@ -1,28 +1,45 @@
-import ProfileForm from "./ProfileForm";
-import FoodUpload from "./FoodUpload";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { AuthProvider, useAuth } from "./AuthContext";
+import Login from "./Login";
+import Signup from "./Signup";
+import Dashboard from "./Dashboard";
+
+function ProtectedRoute({ children }) {
+  const { isAuthenticated, initializing } = useAuth();
+
+  if (initializing) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-500">
+        <span className="inline-flex h-6 w-6 animate-spin rounded-full border-2 border-slate-300 border-t-slate-600" />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+}
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center py-16">
-      <div className="w-full max-w-3xl space-y-10">
-
-        {/* HEADER */}
-        <header className="text-center">
-          <h1 className="text-4xl font-bold text-slate-900">
-            FitFlow AI
-          </h1>
-          <p className="text-slate-500 mt-2">
-            Intelligent fitness analysis powered by AI
-          </p>
-        </header>
-
-        {/* PROFILE */}
-        <ProfileForm />
-
-        {/* FOOD ANALYSIS */}
-        <FoodUpload />
-
-      </div>
-    </div>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
